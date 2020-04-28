@@ -1,8 +1,10 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import { View, StyleSheet, TextInput, Text, TouchableOpacity } from 'react-native';
 import { sizes, colors } from '../constants/theme';
 import  { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
+
 
 export default class Input extends React.Component {
 
@@ -112,3 +114,17 @@ const styles = StyleSheet.create({
         paddingVertical: 12
     }
 });
+
+Input.propTypes = {
+    label: PropTypes.string,
+    error: PropTypes.bool,
+    secure: PropTypes.bool,
+    rating: PropTypes.number,
+    rightIcon: PropTypes.node,
+    onRightPress: PropTypes.func,
+    leftIcon: PropTypes.node,
+    onLeftPress: PropTypes.func,
+    placeholder: PropTypes.string,
+    email: PropTypes.bool,
+    phone: PropTypes.bool
+  };

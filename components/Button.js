@@ -1,32 +1,34 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { sizes, colors } from '../constants/theme';
 
+
 const Button = ({
-    children,
-    rounded,
-    outlined, 
-    customStyle,
-    color,
-    ...restProps
-  }) => {
+  children,
+  rounded,
+  outlined, 
+  customStyle,
+  color,
+  ...restProps
+}) => {
   
-    let inlineStyle = [{ backgroundColor: color},]
+  let inlineStyle = [{ backgroundColor: color},]
   
-    inlineStyle = inlineStyle.concat(style.defaultStyle)
+  inlineStyle = inlineStyle.concat(style.defaultStyle)
   
-    if (rounded) {
-      inlineStyle = inlineStyle.concat(style.roundBorder)
-    }
+  if (rounded) {
+    inlineStyle = inlineStyle.concat(style.roundBorder)
+  }
   
-    if (outlined) {
+  if (outlined) {
       inlineStyle = inlineStyle.concat(style.outlined)
     }
-  
+    
     if (customStyle) {
-        inlineStyle = inlineStyle.concat(customStyle)
+      inlineStyle = inlineStyle.concat(customStyle)
     }
-
+    
     return (
       <TouchableOpacity {...restProps}>
           <View style={inlineStyle}>
@@ -36,22 +38,29 @@ const Button = ({
     )
   }
   
-const style = StyleSheet.create({
+  const style = StyleSheet.create({
     defaultStyle: {
-        height: sizes.formHeight,
-        width: sizes.formWidth,
-        justifyContent: 'center',
-        flexDirection: 'row',
-        paddingVertical: 10,  
+      height: sizes.formHeight,
+      width: sizes.formWidth,
+      justifyContent: 'center',
+      flexDirection: 'row',
+      paddingVertical: 10,  
     },
     roundBorder: {
-        borderRadius: 30
+      borderRadius: 30
     },
     outlined: {
-        backgroundColor: 'transparent',
-        borderWidth: 1
+      backgroundColor: 'transparent',
+      borderWidth: 1
     },
     
-})
+  })
   
   export default Button
+  
+  Button.propTypes = {
+    rounded: PropTypes.bool,
+    outlined: PropTypes.bool,
+    customStyle: PropTypes.object,
+    color: PropTypes.string,
+  };

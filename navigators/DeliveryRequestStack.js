@@ -5,6 +5,7 @@ import DisplayRequest from '../screens/DisplayRequest';
 import RequestDelivery from '../screens/RequestDelivery';
 import SelectRider from '../screens/SelectRider';
 import ConfirmDelivery from '../screens/ConfirmDelivery';
+import SetLocationPin from '../screens/SetLocationPin';
 
 export default DeliveryRequestStack =  createStackNavigator({
     Home: Dashboard,
@@ -12,7 +13,8 @@ export default DeliveryRequestStack =  createStackNavigator({
     DisplayRequest: DisplayRequest,
     RequestRider: RequestDelivery,
     SelectRider : SelectRider,
-    ConfirmDelivery : ConfirmDelivery
+    ConfirmDelivery : ConfirmDelivery,
+    SetDestinationPin : SetLocationPin
 },{
     'initialRouteName': 'Home',
     headerMode: 'none'

@@ -8,5 +8,5 @@ export const AppContainer = createAppContainer( createSwitchNavigator({
     Auth: AuthStack,
     Drawer: DrawerNavigator
 },{
-    'initialRouteName': 'Drawer'
+    'initialRouteName': 'Splash'
 } ));

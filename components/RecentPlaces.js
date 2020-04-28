@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '../constants/theme';
 import { Divider, ListItem } from 'react-native-elements';

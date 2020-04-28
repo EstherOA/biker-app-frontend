@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import { View, StyleSheet, Text, TextInput, TouchableOpacity }  from 'react-native';
 import { Icon, Input } from 'react-native-elements';
 import { colors, sizes, elevationShadowStyle } from '../constants/theme';
+
 
 export default class HomeSearch extends React.Component {
 
@@ -69,4 +71,9 @@ const styles = StyleSheet.create({
         height: 35
     }
     
-})
+});
+
+HomeSearch.propTypes = {
+    onFocus: PropTypes.func,
+    onRightIconPress: PropTypes.func,
+  };

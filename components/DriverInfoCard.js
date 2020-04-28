@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
 import { View, Image, Text, StyleSheet } from 'react-native';
 import { Rating, AirbnbRating, Divider, Icon } from 'react-native-elements';
 import { colors, elevationShadowStyle } from '../constants/theme';
 
 const driverImg = require('../assets/avatar.jpg');
+
 
 class DriverInfoCard extends Component {
   state = {  }
@@ -77,3 +79,10 @@ const styles = StyleSheet.create({
     height: '100%'
   }
 });
+
+DriverInfoCard.propTypes = {
+  driverImg: PropTypes.func,
+  driverName: PropTypes.string,
+  arrivalTime: PropTypes.number,
+  rating: PropTypes.number,
+};

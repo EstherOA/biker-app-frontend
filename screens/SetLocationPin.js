@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text, Dimensions, NativeModules, Platform, Keyboard } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, NativeModules, Platform, TouchableOpacity } from 'react-native';
 import { Icon, Avatar, Header } from 'react-native-elements';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
+import Button from '../components/Button';
 import { colors, elevationShadowStyle } from '../constants/theme';
-import HomeSearch from '../components/HomeSearch';
-import RecentPlaces from '../components/RecentPlaces';
+import PickupCallout from '../components/PickupCallout';
 
 const screen = Dimensions.get('window');
 const avatarImg = require('../assets/avatar.jpg');
@@ -16,14 +16,13 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const { StatusBarManager } = NativeModules;
 
 
-export default class Dashboard extends React.Component {
+export default class SetLocationPin extends React.Component {
 
     state = {
         mapRegion: null,
         userPermission: false,
         prevlong: null, 
-        prevlat: null,
-        showRecent: false,
+        prevlat: null
     }
 
     setMapViewRef = (mapView)=>{
@@ -59,14 +58,14 @@ export default class Dashboard extends React.Component {
         await this.userLocation();
     }
 
-    onRegionChange(region, lastLat, lastLong) {
-        this.setState({
-          mapRegion: region,
-          // If there are no new values set the current ones
-          prevlat: lastLat || this.state.prevlat,
-          prevlong: lastLong || this.state.prevlong
-        });
-    }
+    // onRegionChange(region, lastLat, lastLong) {
+    //     this.setState({
+    //       mapRegion: region,
+    //       // If there are no new values set the current ones
+    //       prevlat: lastLat || this.state.prevlat,
+    //       prevlong: lastLong || this.state.prevlong
+    //     });
+    // }
 
     centerMap = ()=> {
         this.userLocation();
@@ -77,57 +76,49 @@ export default class Dashboard extends React.Component {
         })
     }
 
-    navigateDrawer = () => {
-        const { toggleDrawer } = this.props.navigation;
-        toggleDrawer();
+    addDestinationMarker = () => {
+
     }
+
+    // navigateDrawer = () => {
+    //     const { toggleDrawer } = this.props.navigation;
+    //     toggleDrawer();
+    // }
 
     navigateDestinationSelect = () => {
-        Keyboard.dismiss();
         const { navigate } = this.props.navigation;
-        const { mapRegion } = this.state;
-
-        navigate('Destination', {
-            currentLong: mapRegion.longitude,
-            currentLat: mapRegion.latitude
-        });
-    }
-
-    toggleRecent = () => {
-        const { showRecent } = this.state;
-
-        this.setState({
-            showRecent: !showRecent
-        })
+        navigate('Destination');
     }
 
     render() {
-        const { mapRegion, showRecent } = this.state;
+        const { mapRegion } = this.state;
         return (
             <View style={styles.container}>
                 <MapView
                     ref={this.setMapViewRef}
                     style={styles.map}
                     region={mapRegion}
-                    showsUserLocation={false}
+                    showsUserLocation={true}
                     showsCompass={false}
                     showsBuildings={true}
                     showsMyLocationButton={false}
-                    // onPanDrag={this.onPanDrag}
-                    >
-                    <Marker coordinate={{ latitude: 37.4219995, longitude: -122.0840002}}>
-                        <Icon 
-                            name='md-pin' 
-                            color={colors.secondary}
-                            size={35}
-                            type='ionicon'
-                        />
-                    </Marker>
+                  >
+                    <MapView.Marker 
+                      draggable
+                      coordinate={{ latitude: 37.4219995, longitude: -122.0840002}}>
+                      <Icon 
+                        name='md-pin' 
+                        color={colors.primary}
+                        size={35}
+                        type='ionicon'
+                      />
+                    </MapView.Marker>                    
                     </MapView>
                     <Header 
-                        leftComponent={{ icon: 'menu', size: 20, color : colors.black, onPress: this.navigateDrawer }} 
-                        centerComponent={{ text: 'Home', style: { color: colors.black, fontWeight: '400', fontSize: 13 } }}
-                        rightComponent={<Avatar
+                        leftComponent={{ icon: 'md-arrow-back', size: 20, color : colors.black, onPress: this.navigateDestinationSelect, type: 'ionicon' }} 
+                        centerComponent={{ text: 'Request Trip', style: { color: colors.black, fontWeight: '400', fontSize: 13 } }}
+                        rightComponent={
+                        <Avatar
                             rounded
                             source={avatarImg}
                             size={25}
@@ -135,26 +126,21 @@ export default class Dashboard extends React.Component {
                           } 
                           backgroundColor="white"
                           containerStyle={styles.headerStyle}
+                      />
+                    <Icon 
+                        name="md-locate"
+                        type="ionicon"
+                        size={24}
+                        // raised
+                        color={colors.black}
+                        containerStyle={styles.locateViewStyle}
+                        onPress={this.centerMap}
                     />
-                    <View style={styles.searchView}>
-                        <HomeSearch onFocus={this.navigateDestinationSelect} onRightIconPress={this.toggleRecent} /> 
+                    <View style={styles.optionContainer}>
+                      <Button rounded color={colors.secondary}>
+                              <Text style={styles.buttonText}>Confirm Destination</Text>
+                      </Button>
                     </View>
-                         {showRecent && 
-                         (<View style={styles.recentView}>
-                            <RecentPlaces/>
-                         </View>)
-                         }
-                    {/* <View style={styles.locateViewStyle}> */}
-                        <Icon 
-                            name="md-locate"
-                            type="ionicon"
-                            size={24}
-                            // raised
-                            color={colors.black}
-                            containerStyle={styles.locateViewStyle}
-                            onPress={this.centerMap}
-                        />
-                    {/* </View> */}
             </View>
         )
     }
@@ -173,27 +159,20 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         margin: 0,
         height: 60,
-        ...elevationShadowStyle(3),
+        ...elevationShadowStyle(5),
         backgroundColor: colors.white        
-    },
-    searchView: {
-        marginTop: 17,
-        justifyContent: 'center',
-        flexDirection: 'row'
-    },
-    recentView: {
-        justifyContent: 'center',
-        flexDirection: 'row'
     },
     locateViewStyle: {
         borderRadius: 5,
         position: 'absolute',
-        bottom: 20,
-        right: 20,
+        bottom: '30%',
+        right: 10,
         backgroundColor: colors.white,
         padding: 7,
         ...elevationShadowStyle(3),
-        // height: 30,
-        // width: 30
-    }
+    },
+    buttonText: {
+      fontSize: 17,
+      color: colors.white
+  }
 });

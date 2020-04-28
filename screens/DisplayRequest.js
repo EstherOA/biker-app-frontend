@@ -7,14 +7,16 @@ import * as Location from 'expo-location';
 import Button from '../components/Button';
 import { colors, elevationShadowStyle } from '../constants/theme';
 import PickupCallout from '../components/PickupCallout';
+import MapViewDirections from 'react-native-maps-directions';
+import ENV_VARS from "../Config";
 
+const API_KEY = ENV_VARS.API_KEY;
 const screen = Dimensions.get('window');
 const avatarImg = require('../assets/avatar.jpg');
 const ASPECT_RATIO = screen.width / screen.height;
 const LATITUDE_DELTA = 0.00922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const { StatusBarManager } = NativeModules;
-
 
 export default class DisplayRequest extends React.Component {
 
@@ -90,6 +92,18 @@ export default class DisplayRequest extends React.Component {
         navigate('Destination');
     }
 
+    getDestinationCoords = () => {
+      const { navigation } = this.props;
+
+      return navigation.getParam('pickupCoords');
+    }
+
+    getPickupCoords = () => {
+      const { navigation } = this.props;
+
+      return navigation.getParam('destinationCoords');
+    }
+
     render() {
         const { mapRegion } = this.state;
         return (
@@ -104,19 +118,30 @@ export default class DisplayRequest extends React.Component {
                     showsMyLocationButton={false}
                   >
                     <MapView.Marker 
-                      coordinate={{ latitude: 37.4219995, longitude: -122.0840002}}>
+                      coordinate={this.getPickupCoords}>
+                      <Icon 
+                        name='md-pin' 
+                        color={colors.primary}
+                        size={35}
+                        type='ionicon'
+                      />
+                    </MapView.Marker>  
+                    <MapView.Marker 
+                      coordinate={this.getDestinationCoords}>
                       <Icon 
                         name='md-pin' 
                         color={colors.secondary}
                         size={35}
                         type='ionicon'
                       />
-                        <MapView.Callout tooltip>
-                          <PickupCallout/>
-                          
-                           {/* <Text>Home</Text> */}
-                        </MapView.Callout>
-                    </MapView.Marker>                    
+                    </MapView.Marker>  
+                    <MapViewDirections
+                      origin={this.getPickupCoords}
+                      destination={this.getDestinationCoords}
+                      apikey={API_KEY}
+                      strokeWidth={3}
+                      strokeColor={colors.secondary}
+                    />                  
                     </MapView>
                     <Header 
                         leftComponent={{ icon: 'md-arrow-back', size: 20, color : colors.black, onPress: this.navigateDestinationSelect, type: 'ionicon' }} 

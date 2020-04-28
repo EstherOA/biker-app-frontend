@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
 import { View, StyleSheet, NativeModules, Platform} from 'react-native';
 import { Input, Header, Icon, Avatar, Divider } from 'react-native-elements';
 import { colors, elevationShadowStyle } from '../constants/theme';
@@ -6,6 +7,8 @@ import { getLocation } from '../api/GooglePlaces';
 
 const avatarImg = require('../assets/avatar.jpg');
 const { StatusBarManager } = NativeModules;
+
+
 
 class TripSearchHeader extends Component {
 
@@ -24,8 +27,20 @@ class TripSearchHeader extends Component {
     return ref.current.isFocused() ? colors.gray : colors.white;
   }
 
+  setDestination = (destination) => {
+
+    const { searchFunction, loadFunction } = this.props;
+    // loadFunction();
+    this.setState({
+      destination
+    });
+    console.log("Destination: " + destination);
+    searchFunction(destination);
+
+  }
+
   render() { 
-    const { backFunction, searchFunction } = this.props;
+    const { backFunction, isLoading, getPickupName } = this.props;
     const { destination } = this.state;
     return (  
       <View style={styles.container}>
@@ -62,16 +77,24 @@ class TripSearchHeader extends Component {
           <Input 
             ref={this.inputPickup}
             placeholder="Someplace pickup"
-            inputContainerStyle={[styles.inputStyle ]}
-        
+            inputContainerStyle={[styles.inputStyle ]}   
+            value={getPickupName()}    
             />
           <Divider /> 
           <Input 
             ref={this.inputDest}
             inputContainerStyle={[styles.inputStyle ]}
-            placeholder="Someplace destination"
+            placeholder="Delivery to?"
             value={destination}
-            onChangeText={() => searchFunction(destination)}
+            onChangeText={(destination) => this.setDestination(destination)}
+          //   { ...isLoading && (rightIcon={
+          //     <Icon
+          //     name='md-refresh'
+          //     type='ionicon'
+          //     size={15}
+          //     color= {colors.gray}
+          //     />
+          // })}
           /> 
           </View>
         </View>
@@ -139,4 +162,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   }
 
-})
+});
+
+TripSearchHeader.propTypes = {
+  searchFunction: PropTypes.func,
+  loadFunction: PropTypes.func
+}

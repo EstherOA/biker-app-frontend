@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     height: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flex: 1,
+    // flex: 1,
   },
   textStyle: {
     fontSize: 15,

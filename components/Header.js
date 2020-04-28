@@ -1,11 +1,14 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import { View, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Platform } from '@unimodules/core';
 import { sizes, colors } from '../constants/theme';
 
+
 export default class Header extends React.Component {
 
+    
     renderLeft = () => {
         const { leftElement, onLeftPress } = this.props;
 
@@ -85,3 +88,12 @@ const styles = StyleSheet.create({
         elevation: 2 ,
     }
 })
+
+Header.propTypes = {
+    leftElement: PropTypes.func,
+    rightElement: PropTypes.node,
+    onRightPress: PropTypes.function,
+    onLeftPress: PropTypes.function,
+    title: PropTypes.string,
+    shadow: PropTypes.bool
+  };

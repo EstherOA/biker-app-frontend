@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
 import { ScrollView, StyleSheet } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { colors } from '../constants/theme';
@@ -70,10 +71,12 @@ import { colors } from '../constants/theme';
 //   }
 // ];
 
+
+
 class LocationList extends Component {
   state = {  }
   render() { 
-    const { list, hasRight } = this.props;
+    const { list, pressFunction } = this.props;
     return ( 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         {
@@ -84,6 +87,7 @@ class LocationList extends Component {
               title={l.name}
               bottomDivider
               rightIcon={{ name: l.rightIcon, type: 'ionicon', size: 20, color: l.color}}
+              onPress = {() => pressFunction(l.location) }
             />
           ))
         }
@@ -100,3 +104,8 @@ const styles = StyleSheet.create({
     // paddingBottom: 30
   }
 });
+
+LocationList.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.object),
+  pressFunction: PropTypes.func
+}
